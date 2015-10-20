@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">AZBarrage</string>
+    <string name="default_text">本应用原文链接：http://blog.csdn.net/xieyupeng520/article/details/49232925</string>
+
+    <string-array name="default_text_array">
+        <item>颓废不是我的调调，积极才是我的王道</item>
+        <item>最让人感动的不是强者的保护，而是弱者的坚强</item>
+        <item>轻轻浅浅的笑，天马行空的心</item>
+        <item>I love you, 谢宇鹏！~</item>
+        <item>做好人，做好事；做明白人，做明白事！</item>
+        <item>认真你就赢了</item>
+        <item>我这么努力你都不赞我</item>
+        <item>等你一切都准备好了，或许你就没动力了</item>
+        <item>我的博客地址：http://blog.csdn.net/xieyupeng520</item>
+        <item>为什么毕业过了几年以后，同学之间的差距变的那么大？</item>
+        <item>本来差距就大，不过学校就那么点事，不显而已。</item>
+        <item>w1dyjtx!</item>
+        <item>加油加油加油！</item>
+        <item>这是一个弹幕的例子</item>
+        <item>祝你生日快乐~</item>
+        <item>本应用链接：http://blog.csdn.net/xieyupeng520/article/details/49232925</item>
+    </string-array>
+</resources>
