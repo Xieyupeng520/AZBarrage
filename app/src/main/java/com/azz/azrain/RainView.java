@@ -78,8 +78,8 @@ public class RainView extends BaseView {
     protected boolean needStopAnimThread() {
         for(RainLine rainLine : rainLines) {
             if (rainLine.getStartY() >= getWidth()) {
-                rainLine.resetRandom();
-//                rainLine.initRandom();
+//                rainLine.resetRandom();
+                rainLine.initRandom();
             }
         }
         return false;

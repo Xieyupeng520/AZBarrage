@@ -19,9 +19,7 @@ public class RainLine {
     private int maxX; //x最大范围
     private int maxY; //y最大范围
 
-//    public RainLine() {
-//        reset();
-//    }
+
     public RainLine(int maxX, int maxY) {
         this.maxX = maxX;
         this.maxY = maxY;
@@ -40,20 +38,6 @@ public class RainLine {
         stopX = startX + deltaX;
         stopY = startY + deltaY;
     }
-//    /**
-//     * 重置
-//     */
-//    public void reset() {
-//        if (maxX != 0 && maxY != 0) {
-//            resetRandom();
-//            return;
-//        }
-//        startX = 0;
-//        startY = 30;
-//
-//        stopX = startX + deltaX;
-//        stopY = startY + deltaY;
-//    }
 
     /**
      * 随机初始化
@@ -85,7 +69,7 @@ public class RainLine {
      * @return 是否出界
      */
     public boolean outOfBounds() {
-        if (getStartY() >= maxY) {
+        if (getStartY() >= maxY || getStartX() >= maxX) {
             resetRandom();
             return true;
         }

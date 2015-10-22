@@ -38,6 +38,5 @@ public class MainActivity extends Activity {
             }
         };
         handler.post(createBarrageView);
-//        handler.postDelayed(createBarrageView, 5000); //为了录屏延迟5s
     }
 }
