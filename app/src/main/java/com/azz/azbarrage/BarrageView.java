@@ -51,7 +51,7 @@ public class BarrageView extends TextView {
      */
     protected void init() {
         //1.设置文字大小
-        textSize = TEXT_MIN + random.nextInt(TEXT_MAX - TEXT_MIN);
+//        textSize = TEXT_MIN + random.nextInt(TEXT_MAX - TEXT_MIN);
         paint.setTextSize(textSize);
 
         //2.设置文字颜色

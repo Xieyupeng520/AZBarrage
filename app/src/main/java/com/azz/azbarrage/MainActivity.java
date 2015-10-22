@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
     //两两弹幕之间的间隔时间
-    public static final int DELAY_TIME = 800;
+    public static final int DELAY_TIME = 500;
 
     private Random random = new Random();
     @Override
