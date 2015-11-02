@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -16,11 +17,14 @@ import java.util.Random;
  * Created by AZZ on 15/10/18 19:43.
  */
 public class BarrageView extends TextView {
+
+    private static final String TAG = "BarrageView";
+
     private Paint paint = new Paint(); //画布参数
 
     private Random random = new Random(); //随机数
 
-    private Thread rollThread; //滚动线程
+    private RollThread rollThread; //滚动线程
 
     private int textSize = 30; //字体大小
     public static final int TEXT_MIN = 12;
@@ -70,6 +74,7 @@ public class BarrageView extends TextView {
         //5.设置y为屏幕高度内内随机，需要注意的是，文字是以左下角为起始点计算坐标的，所以要加上TextSize的大小
         posY = textSize + random.nextInt(windowHeight - textSize);
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawText(getShowText(), posX, posY, paint);
@@ -97,16 +102,28 @@ public class BarrageView extends TextView {
     private void animLogic() {
         posX -= 8;
     }
+
     private boolean needStopRollThread() {
         if (posX <= -paint.measureText(getShowText())) {
             return true;
         }
         return false;
     }
+
     class RollThread extends Thread {
+        private Object mPauseLock; //线程锁
+        private boolean mPauseFlag; //标签：是否暂停
+
+        RollThread() {
+            mPauseLock = new Object();
+            mPauseFlag = false;
+        }
         @Override
         public void run() {
-            while(true) {
+            while (true) {
+                //15/11/01更新：check pause,解决按Home后一分钟以上回到程序会发生满屏线程阻塞
+                checkPause();
+
                 //1.动画逻辑
                 animLogic();
                 //2.绘制图像
@@ -119,7 +136,7 @@ public class BarrageView extends TextView {
                 }
                 //关闭线程逻辑判断
                 if (needStopRollThread()) {
-                    Log.i("azzz", getShowText() + "   -线程停止！");
+                    Log.d(TAG, "线程停止-" + getShowText());
 
                     if (mOnRollEndListener != null) {
                         mOnRollEndListener.onRollEnd();
@@ -134,6 +151,31 @@ public class BarrageView extends TextView {
                 }
             }
         }
+        public void onPause() {
+            synchronized (mPauseLock) {
+                mPauseFlag = true;
+            }
+        }
+        public void onResume() {
+            synchronized (mPauseLock) {
+                mPauseFlag = false;
+                Log.i(TAG, "线程恢复-" + getShowText());
+//                mPauseLock.notifyAll();
+                mPauseLock.notify();
+            }
+        }
+        private void checkPause() {
+            synchronized (mPauseLock) {
+                if (mPauseFlag) {
+                    try {
+                        Log.e(TAG, "线程挂起-" + getShowText());
+                        mPauseLock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -142,10 +184,29 @@ public class BarrageView extends TextView {
     public void setOnRollEndListener(OnRollEndListener onRollEndListener) {
         this.mOnRollEndListener = onRollEndListener;
     }
+
     /**
      * 滚动结束接听器
      */
     interface OnRollEndListener {
         void onRollEnd();
     }
+
+    /**
+     * 15/11/01 测试按Home后一分钟以上回到程序会发生满屏线程阻塞
+     */
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if (rollThread == null) {
+            return;
+        }
+        if (View.GONE == visibility) {
+            rollThread.onPause();
+        } else {
+            rollThread.onResume();
+        }
+
+    }
+
 }
